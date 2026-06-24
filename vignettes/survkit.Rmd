@@ -1,0 +1,103 @@
+---
+title: "Getting started with survkit"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with survkit}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+set.seed(1L)
+```
+
+`survkit` gives one interface over the established survival stack. You choose a
+method by name; the toolkit picks the backend, runs a small-sample power check,
+and hands back a single typed object that prints, summarises, predicts and tidies
+the same way regardless of which estimator produced it.
+
+```{r}
+library(survkit)
+```
+
+## What can it fit?
+
+The method registry is the catalogue. Each row is an estimator; `available`
+reports whether its backend is installed.
+
+```{r}
+survkit_methods()
+```
+
+## A first fit
+
+A Weibull accelerated-failure-time model on the lung-cancer data:
+
+```{r}
+fit <- survkit(survival::Surv(time, status) ~ age + sex, survival::lung,
+               method = "weibull")
+fit
+```
+
+`survkit_tidy()` gives the coefficient table with ratios and confidence
+intervals; `survkit_curve()` gives predicted survival on a time grid.
+
+```{r}
+survkit_tidy(fit)
+survkit_curve(fit, times = c(100, 300, 500))
+```
+
+## Switching method, same interface
+
+The Cox proportional-hazards fit reads the same and tidies the same:
+
+```{r}
+cox <- survkit(survival::Surv(time, status) ~ age + sex, survival::lung,
+               method = "cox")
+survkit_tidy(cox)
+```
+
+## The small-sample gate
+
+Survival models identify from events, not rows. On a small subset the
+events-per-variable gate flags the fit as under-powered:
+
+```{r}
+small <- survival::lung[1:25, ]
+survkit_power(survival::Surv(time, status) ~ age + sex + ph.ecog, small)
+```
+
+`survkit()` runs this automatically and warns, so you can simplify, penalise, or
+abstain rather than trust over-fit estimates.
+
+## Competing risks
+
+With a multi-state response (the event is a factor whose first level is
+censoring), the Fine-Gray subdistribution hazard is one call:
+
+```{r}
+mg <- survival::mgus2
+mg$etime <- with(mg, ifelse(pstat == 1, ptime, futime))
+mg$event <- with(mg, factor(ifelse(pstat == 1, "pcm",
+                            ifelse(death == 1, "death", "censor")),
+                            levels = c("censor", "pcm", "death")))
+fg <- survkit(survival::Surv(etime, event) ~ age + sex, mg,
+              method = "fine_gray", cause = "pcm")
+survkit_tidy(fg)
+```
+
+## Extending the toolkit
+
+Adding a method is one registry call; the public interface does not change.
+
+```{r}
+survkit_register("exp_survreg", kind = "parametric", backend = "survival",
+  fit = function(formula, data, ...) {
+    raw <- survival::survreg(formula, data = data, dist = "exponential", ...)
+    list(raw = raw, coef = coef(raw), vcov = vcov(raw),
+         loglik = as.numeric(logLik(raw)), n = nrow(data),
+         n_events = NA_integer_, kind = "parametric", backend = "survival")
+  })
+"exp_survreg" %in% survkit_methods()$method
+```

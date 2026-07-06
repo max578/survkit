@@ -1,1 +1,8 @@
 ^CONSTELLATION_MEMBER\.md$
+^_pkgdown\.yml$
+^\.github$
+^docs$
+^pkgdown$
+^codemeta\.json$
+^\.Rproj\.user$
+^.*\.Rproj$

@@ -21,8 +21,15 @@ A list: \code{n}, \code{n_events}, \code{n_predictors}, \code{events_per_variabl
 \description{
 Assess whether a survival model is identifiable from the available events.
 Returns the event count, the predictor count, the events-per-variable ratio
-and a verdict; \code{\link[=survkit]{survkit()}} attaches this to every fit and warns when a model
+and a verdict. \code{\link[=survkit]{survkit()}} attaches this to every fit and warns when a model
 is under-powered.
+}
+\details{
+The event count comes from the last column of the \code{survival::Surv()} response.
+When that column is a multi-state factor (competing risks) the event count
+cannot be read as a single 0/1 flag, so the verdict is \code{"unknown"} rather than
+a guess. For a counting-process response (recurrent events) the count is the
+number of event rows, not the number of distinct subjects.
 }
 \examples{
 df <- data.frame(time = rexp(40), status = rbinom(40, 1, 0.3),
@@ -30,3 +37,14 @@ df <- data.frame(time = rexp(40), status = rbinom(40, 1, 0.3),
 survkit_power(survival::Surv(time, status) ~ x1 + x2, df)$verdict
 
 }
+\seealso{
+\code{\link[=survkit]{survkit()}}, which runs this gate on every fit.
+
+Other model-fitting: 
+\code{\link{survkit}()},
+\code{\link{survkit_cuminc}()},
+\code{\link{survkit_rmst}()},
+\code{\link{survkit_score}()},
+\code{\link{survkit_triangulate}()}
+}
+\concept{model-fitting}

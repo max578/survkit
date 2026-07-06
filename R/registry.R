@@ -33,6 +33,8 @@
 #'          kind = "parametric", backend = "survival")
 #'   })
 #' "exp_survreg" %in% survkit_methods()$method
+#' @family method-registry
+#' @seealso [survkit_methods()] to list what is registered.
 #' @export
 survkit_register <- function(name, kind, backend, fit, note = "") {
   stopifnot(is.character(name), length(name) == 1L, is.function(fit))
@@ -47,6 +49,8 @@ survkit_register <- function(name, kind, backend, fit, note = "") {
 #'   backend installed) and `note`.
 #' @examples
 #' survkit_methods()
+#' @family method-registry
+#' @seealso [survkit_register()] to add a method.
 #' @export
 survkit_methods <- function() {
   keys <- ls(.survkit_registry, sorted = TRUE)
@@ -87,8 +91,14 @@ survkit_methods <- function() {
   }
   survkit_register("spline", "spline", "flexsurv",
     fit = .survkit_fit_spline, note = "Royston-Parmar flexible spline")
+  survkit_register("km", "nonparametric", "survival",
+    fit = .survkit_fit_km,
+    note = "Kaplan-Meier / Nelson-Aalen non-parametric baseline")
   survkit_register("cox", "cox", "survival",
     fit = .survkit_fit_cox, note = "Cox proportional hazards")
+  survkit_register("cox_ridge", "cox", "survival",
+    fit = .survkit_fit_cox_ridge,
+    note = "ridge-penalised Cox (shrinkage for the few-events regime)")
   survkit_register("frailty", "frailty", "coxme",
     fit = .survkit_fit_frailty, note = "mixed-effects Cox / shared frailty")
   survkit_register("cause_specific", "competing", "survival",

@@ -1,0 +1,36 @@
+url: https://github.com/max578/survkit
+
+template:
+  bootstrap: 5
+
+reference:
+- title: Fitting
+  desc: One interface over the survival stack.
+  contents:
+  - survkit
+  - survkit_fit
+  - survkit_tidy
+  - survkit_curve
+- title: Decision-relevant estimands
+  desc: The quantities a decision turns on.
+  contents:
+  - survkit_rmst
+  - survkit_cuminc
+- title: Triangulation and scoring
+  desc: The honesty layer.
+  contents:
+  - survkit_triangulate
+  - survkit_score
+  - survkit_power
+- title: The method registry
+  desc: The extension point and its contract.
+  contents:
+  - survkit_register
+  - survkit_methods
+  - survkit_contract
+  - survkit_validate_method
+- title: Composition
+  desc: Emission to the ensemble-manifest contract.
+  contents:
+  - as_survkit_manifest
+  - survkit_manifest

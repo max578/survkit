@@ -10,8 +10,15 @@
 #'
 #' Assess whether a survival model is identifiable from the available events.
 #' Returns the event count, the predictor count, the events-per-variable ratio
-#' and a verdict; [survkit()] attaches this to every fit and warns when a model
+#' and a verdict. [survkit()] attaches this to every fit and warns when a model
 #' is under-powered.
+#'
+#' @details
+#' The event count comes from the last column of the `survival::Surv()` response.
+#' When that column is a multi-state factor (competing risks) the event count
+#' cannot be read as a single 0/1 flag, so the verdict is `"unknown"` rather than
+#' a guess. For a counting-process response (recurrent events) the count is the
+#' number of event rows, not the number of distinct subjects.
 #'
 #' @param formula A model formula with a `survival::Surv()` response.
 #' @param data A data frame.
@@ -26,6 +33,8 @@
 #'                  x1 = rnorm(40), x2 = rnorm(40))
 #' survkit_power(survival::Surv(time, status) ~ x1 + x2, df)$verdict
 #'
+#' @family model-fitting
+#' @seealso [survkit()], which runs this gate on every fit.
 #' @export
 survkit_power <- function(formula, data, min_epv = 10) {
   counts <- .survkit_counts(formula, data)

@@ -55,68 +55,133 @@ S7::method(summary, survkit_fit) <- function(object, ...) {
 
 #' Tidy a fitted model into a coefficient table
 #'
-#' Estimates with standard errors, hazard / time ratios (the exponentiated
-#' coefficient) and Wald confidence intervals.
+#' Return the coefficient table with standard errors, the exponentiated effect
+#' and Wald confidence intervals. Covariate rows and baseline distribution
+#' parameters are separated by a `component` column, and the `ratio_type` column
+#' records whether a covariate effect reads as a hazard ratio (proportional
+#' hazards) or a time ratio (accelerated failure time). Auxiliary parameters (a
+#' log-scale, a shape) are never exponentiated into the ratio column, so a
+#' parametric fit no longer reports a meaningless "ratio" for its scale.
 #'
 #' @param fit A [survkit_fit].
-#' @param conf_level Confidence level (default `0.95`).
-#' @return A data frame: `term`, `estimate`, `std_error`, `ratio`,
-#'   `conf_low`, `conf_high`.
+#' @param conf_level Confidence level for the Wald interval (default `0.95`).
+#'
+#' @returns A data frame with columns `term`, `component`
+#'   (`"covariate"` / `"auxiliary"`), `estimate`, `std_error`, `ratio_type`,
+#'   `ratio`, `conf_low` and `conf_high`. For auxiliary parameters `ratio_type`,
+#'   `ratio` and the interval are `NA`.
 #' @examples
 #' fit <- survkit(survival::Surv(time, status) ~ age + sex, survival::lung, method = "cox")
 #' survkit_tidy(fit)
+#' @family fit-methods
+#' @seealso [survkit_curve()] for predicted survival.
 #' @export
 survkit_tidy <- function(fit, conf_level = 0.95) {
   est <- fit@coefficients
+  empty <- data.frame(
+    term = character(0), component = character(0), estimate = numeric(0),
+    std_error = numeric(0), ratio_type = character(0), ratio = numeric(0),
+    conf_low = numeric(0), conf_high = numeric(0), stringsAsFactors = FALSE)
   if (length(est) == 0L) {
-    return(data.frame(term = character(0), estimate = numeric(0)))
+    return(empty)
   }
+
+  # Standard errors from the covariance diagonal, when it is conformable.
   vc <- fit@vcov
   se <- if (!is.null(vc) && all(dim(as.matrix(vc)) == length(est))) {
     sqrt(diag(as.matrix(vc)))
   } else {
     rep(NA_real_, length(est))
   }
+
+  # Split baseline distribution parameters from covariate effects, and only
+  # exponentiate the covariate effects into a ratio.
+  is_aux <- names(est) %in% fit@aux_pars
   z <- stats::qnorm(1 - (1 - conf_level) / 2)
+  ratio <- ifelse(is_aux, NA_real_, exp(est))
+  conf_low <- ifelse(is_aux, NA_real_, exp(est - z * se))
+  conf_high <- ifelse(is_aux, NA_real_, exp(est + z * se))
   data.frame(
-    term = names(est), estimate = unname(est), std_error = unname(se),
-    ratio = unname(exp(est)),
-    conf_low = unname(exp(est - z * se)), conf_high = unname(exp(est + z * se)),
+    term = names(est),
+    component = ifelse(is_aux, "auxiliary", "covariate"),
+    estimate = unname(est), std_error = unname(se),
+    ratio_type = ifelse(is_aux, NA_character_, fit@ratio_type),
+    ratio = unname(ratio),
+    conf_low = unname(conf_low), conf_high = unname(conf_high),
     stringsAsFactors = FALSE)
 }
 
 #' Predicted survival curves
 #'
-#' Backend-aware survival probabilities over a time grid for one or more
-#' covariate profiles. Parametric and spline fits use the backend's own
-#' survival function; Cox-family fits use `survival::survfit()`.
+#' Backend-aware predictions over a time grid for one or more covariate
+#' profiles. Parametric, spline and cure fits use the backend's own distribution
+#' function and support every `type`; Cox-family and non-parametric fits use
+#' `survival::survfit()` and support the survival curve.
 #'
 #' @param fit A [survkit_fit].
-#' @param newdata A data frame of covariate profiles (default: the backend's
-#'   reference profile).
-#' @param times Numeric times at which to evaluate (default: an automatic grid).
-#' @return A data frame with `time`, `survival` and a `profile` index.
+#' @param newdata A data frame of covariate profiles. The default is the
+#'   backend's reference profile.
+#' @param times Numeric times at which to evaluate. The default is an automatic
+#'   grid from the backend.
+#' @param type Character quantity to predict: `"survival"` (default),
+#'   `"hazard"`, `"cumhaz"` or `"quantile"`. The last three need a parametric,
+#'   spline or cure fit.
+#'
+#' @returns A data frame with `time`, `value` (named for `type` when returned by
+#'   the backend) and a `profile` index.
 #' @examples
 #' fit <- survkit(survival::Surv(time, status) ~ age, survival::lung, method = "weibull")
 #' head(survkit_curve(fit, times = c(100, 300, 500)))
+#' @family fit-methods
+#' @seealso [survkit_tidy()] for the coefficient table, [survkit_rmst()] for the
+#'   restricted mean.
 #' @export
-survkit_curve <- function(fit, newdata = NULL, times = NULL) {
+survkit_curve <- function(fit, newdata = NULL, times = NULL,
+                          type = c("survival", "hazard", "cumhaz", "quantile")) {
+  type <- match.arg(type)
+
+  # Non-parametric: the raw object is already a survfit.
+  if (identical(fit@kind, "nonparametric")) {
+    return(.survkit_curve_survfit(fit@fit, times, type))
+  }
+
+  # Parametric / spline / cure: the backend's own distribution function.
   if (fit@kind %in% c("parametric", "spline", "cure") &&
       requireNamespace("flexsurv", quietly = TRUE)) {
-    s <- summary(fit@fit, newdata = newdata, t = times, type = "survival",
+    s <- summary(fit@fit, newdata = newdata, t = times, type = type,
                  tidy = TRUE, ci = FALSE)
-    names(s)[names(s) == "est"] <- "survival"
+    names(s)[names(s) == "est"] <- "value"
     s$profile <- if ("strata" %in% names(s)) s$strata else 1L
-    return(s[, intersect(c("time", "survival", "profile"), names(s)), drop = FALSE])
+    keep <- intersect(c("time", "quantile", "value", "profile"), names(s))
+    return(s[, keep, drop = FALSE])
   }
-  # Cox-family: survfit on the raw fit
-  sf <- survival::survfit(fit@fit, newdata = newdata)
-  ss <- summary(sf, times = times %||% sf$time)
-  if (is.null(dim(ss$surv))) {
-    return(data.frame(time = ss$time, survival = as.numeric(ss$surv), profile = 1L))
+
+  # Cox-family: survfit on the raw fit.
+  sf <- .survkit_survfit(fit@fit, newdata)
+  .survkit_curve_survfit(sf, times, type)
+}
+
+# Turn a survfit object into a tidy per-profile curve. Non-parametric and
+# Cox-family fits share this path; only the survival and cumulative-hazard
+# quantities are available here (the richer types need a parametric fit).
+.survkit_curve_survfit <- function(sf, times, type = "survival") {
+  if (!type %in% c("survival", "cumhaz")) {
+    stop(sprintf(paste0("type '%s' needs a parametric, spline or cure fit; a ",
+                        "survfit-based method offers 'survival' and 'cumhaz'."),
+                 type), call. = FALSE)
   }
-  out <- do.call(rbind, lapply(seq_len(ncol(ss$surv)), function(j) {
-    data.frame(time = ss$time, survival = ss$surv[, j], profile = j)
+  ss <- summary(sf, times = times %||% sf$time, extend = TRUE)
+  mat <- if (identical(type, "cumhaz")) {
+    if (!is.null(ss$cumhaz)) ss$cumhaz else -log(ss$surv)
+  } else {
+    ss$surv
+  }
+  if (is.null(dim(mat))) {
+    return(data.frame(time = ss$time, value = as.numeric(mat), profile = 1L,
+                      stringsAsFactors = FALSE))
+  }
+  do.call(rbind, lapply(seq_len(ncol(mat)), function(j) {
+    data.frame(time = ss$time, value = mat[, j], profile = j,
+               stringsAsFactors = FALSE)
   }))
-  out
 }

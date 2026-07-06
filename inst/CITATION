@@ -1,0 +1,14 @@
+citHeader("To cite survkit in publications, use:")
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "{survkit}: A Unified, Extensible Toolkit for Time-to-Event Analysis",
+  author   = person("Max", "Moldovan"),
+  year     = "2026",
+  note     = sprintf("R package version %s", meta$Version),
+  url      = "https://github.com/max578/survkit",
+  textVersion = paste0(
+    "Moldovan, M. (2026). survkit: A Unified, Extensible Toolkit for ",
+    "Time-to-Event Analysis. R package version ", meta$Version, ". ",
+    "https://github.com/max578/survkit")
+)

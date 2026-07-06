@@ -50,3 +50,14 @@ fit
 coef(fit)
 
 }
+\seealso{
+\code{\link[=survkit_methods]{survkit_methods()}} for the registry, \code{\link[=survkit_power]{survkit_power()}} for the gate.
+
+Other model-fitting: 
+\code{\link{survkit_cuminc}()},
+\code{\link{survkit_power}()},
+\code{\link{survkit_rmst}()},
+\code{\link{survkit_score}()},
+\code{\link{survkit_triangulate}()}
+}
+\concept{model-fitting}

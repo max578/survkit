@@ -4,25 +4,45 @@
 \alias{survkit_curve}
 \title{Predicted survival curves}
 \usage{
-survkit_curve(fit, newdata = NULL, times = NULL)
+survkit_curve(
+  fit,
+  newdata = NULL,
+  times = NULL,
+  type = c("survival", "hazard", "cumhaz", "quantile")
+)
 }
 \arguments{
 \item{fit}{A \link{survkit_fit}.}
 
-\item{newdata}{A data frame of covariate profiles (default: the backend's
-reference profile).}
+\item{newdata}{A data frame of covariate profiles. The default is the
+backend's reference profile.}
 
-\item{times}{Numeric times at which to evaluate (default: an automatic grid).}
+\item{times}{Numeric times at which to evaluate. The default is an automatic
+grid from the backend.}
+
+\item{type}{Character quantity to predict: \code{"survival"} (default),
+\code{"hazard"}, \code{"cumhaz"} or \code{"quantile"}. The last three need a parametric,
+spline or cure fit.}
 }
 \value{
-A data frame with \code{time}, \code{survival} and a \code{profile} index.
+A data frame with \code{time}, \code{value} (named for \code{type} when returned by
+the backend) and a \code{profile} index.
 }
 \description{
-Backend-aware survival probabilities over a time grid for one or more
-covariate profiles. Parametric and spline fits use the backend's own
-survival function; Cox-family fits use \code{survival::survfit()}.
+Backend-aware predictions over a time grid for one or more covariate
+profiles. Parametric, spline and cure fits use the backend's own distribution
+function and support every \code{type}; Cox-family and non-parametric fits use
+\code{survival::survfit()} and support the survival curve.
 }
 \examples{
 fit <- survkit(survival::Surv(time, status) ~ age, survival::lung, method = "weibull")
 head(survkit_curve(fit, times = c(100, 300, 500)))
 }
+\seealso{
+\code{\link[=survkit_tidy]{survkit_tidy()}} for the coefficient table, \code{\link[=survkit_rmst]{survkit_rmst()}} for the
+restricted mean.
+
+Other fit-methods: 
+\code{\link{survkit_tidy}()}
+}
+\concept{fit-methods}

@@ -40,3 +40,12 @@ survkit_register("exp_survreg", "parametric", "survival",
   })
 "exp_survreg" \%in\% survkit_methods()$method
 }
+\seealso{
+\code{\link[=survkit_methods]{survkit_methods()}} to list what is registered.
+
+Other method-registry: 
+\code{\link{survkit_contract}()},
+\code{\link{survkit_methods}()},
+\code{\link{survkit_validate_method}()}
+}
+\concept{method-registry}

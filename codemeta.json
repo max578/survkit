@@ -1,0 +1,205 @@
+{
+  "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
+  "@type": "SoftwareSourceCode",
+  "identifier": "survkit",
+  "description": "One clean interface over the established survival stack (parametric accelerated-failure-time models, Cox proportional hazards, competing risks, recurrent events, frailty, flexible splines and a non-parametric Kaplan-Meier baseline), driven by an extensible method registry so new estimators slot in without an API change. Fits return a single typed object with consistent prediction, summary and tidying methods. On top of the fits sit the value layer: cross-method triangulation that reads disagreement as a misspecification signal, restricted mean survival time and cumulative incidence, inverse-probability-of-censoring-weighted predictive scoring, a small-sample power gate that abstains when events are too few to identify the model, a registry conformance contract, and an optional emitter to an ensemble-manifest contract for composition with a wider analytics stack.",
+  "name": "survkit: A Unified, Extensible Toolkit for Time-to-Event Analysis",
+  "codeRepository": "https://github.com/max578/survkit",
+  "issueTracker": "https://github.com/max578/survkit/issues",
+  "license": "https://spdx.org/licenses/MIT",
+  "version": "0.1.0",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 4.5.2 (2025-10-31)",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Max",
+      "familyName": "Moldovan",
+      "email": "max.moldovan@gmail.com",
+      "@id": "https://orcid.org/0000-0001-9680-8474"
+    }
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Max",
+      "familyName": "Moldovan",
+      "email": "max.moldovan@gmail.com",
+      "@id": "https://orcid.org/0000-0001-9680-8474"
+    }
+  ],
+  "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "flexsurv",
+      "name": "flexsurv",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=flexsurv"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "cmprsk",
+      "name": "cmprsk",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=cmprsk"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "coxme",
+      "name": "coxme",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=coxme"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "flexsurvcure",
+      "name": "flexsurvcure",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=flexsurvcure"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "icenReg",
+      "name": "icenReg",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=icenReg"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "MASS",
+      "name": "MASS",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=MASS"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "testthat",
+      "name": "testthat",
+      "version": ">= 3.0.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "knitr",
+      "name": "knitr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rmarkdown",
+      "name": "rmarkdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+    }
+  ],
+  "softwareRequirements": {
+    "1": {
+      "@type": "SoftwareApplication",
+      "identifier": "R",
+      "name": "R",
+      "version": ">= 4.2.0"
+    },
+    "2": {
+      "@type": "SoftwareApplication",
+      "identifier": "S7",
+      "name": "S7",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=S7"
+    },
+    "3": {
+      "@type": "SoftwareApplication",
+      "identifier": "stats",
+      "name": "stats"
+    },
+    "4": {
+      "@type": "SoftwareApplication",
+      "identifier": "survival",
+      "name": "survival",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=survival"
+    },
+    "SystemRequirements": null
+  },
+  "fileSize": "124.73KB",
+  "citation": [
+    {
+      "@type": "SoftwareSourceCode",
+      "datePublished": "2026",
+      "author": [
+        {
+          "@type": "Person",
+          "givenName": "Max",
+          "familyName": "Moldovan"
+        }
+      ],
+      "name": "{survkit}: A Unified, Extensible Toolkit for Time-to-Event Analysis",
+      "url": "https://github.com/max578/survkit",
+      "description": "R package version 0.1.0"
+    }
+  ],
+  "releaseNotes": "https://github.com/max578/survkit/blob/main/NEWS.md",
+  "readme": "https://github.com/max578/survkit/blob/main/README.md",
+  "contIntegration": ["https://github.com/max578/survkit/actions/workflows/R-CMD-check.yaml", "https://app.codecov.io/gh/max578/survkit"],
+  "developmentStatus": "https://lifecycle.r-lib.org/articles/stages.html#experimental"
+}

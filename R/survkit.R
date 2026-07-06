@@ -29,6 +29,8 @@
 #' fit
 #' coef(fit)
 #'
+#' @family model-fitting
+#' @seealso [survkit_methods()] for the registry, [survkit_power()] for the gate.
 #' @export
 survkit <- function(formula, data, method = "weibull", ...,
                     check_power = TRUE, warn_underpowered = TRUE) {
@@ -51,5 +53,7 @@ survkit <- function(formula, data, method = "weibull", ...,
     loglik = res$loglik %||% NA_real_,
     n = as.integer(res$n %||% NA_integer_),
     n_events = as.integer(res$n_events %||% NA_integer_),
+    ratio_type = res$ratio_type %||% NA_character_,
+    aux_pars = res$aux_pars %||% character(0),
     power = power, formula = formula, call = match.call())
 }

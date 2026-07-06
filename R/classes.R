@@ -13,8 +13,9 @@
 #' sample and event counts, and the small-sample power verdict.
 #'
 #' @param method Character method name (a registry key, e.g. `"weibull"`).
-#' @param kind Character method family (`"parametric"`, `"cox"`,
-#'   `"competing"`, `"recurrent"`, `"frailty"`, `"spline"`).
+#' @param kind Character method family: one of `"parametric"`, `"spline"`,
+#'   `"nonparametric"`, `"cox"`, `"frailty"`, `"competing"`, `"recurrent"`,
+#'   `"cure"` or `"interval"`.
 #' @param backend Character name of the package that produced the fit.
 #' @param fit The raw backend fit object.
 #' @param coefficients Named numeric coefficient vector.
@@ -22,11 +23,18 @@
 #' @param loglik Numeric log-likelihood (or `NA`).
 #' @param n Integer number of observations.
 #' @param n_events Integer number of events (non-censored).
+#' @param ratio_type Character code for how an exponentiated covariate
+#'   coefficient reads: `"HR"` (hazard ratio), `"TR"` (time ratio), `"OR"`
+#'   (odds ratio), `"probit"`, or `NA` when the fit has no such coefficients.
+#' @param aux_pars Character names of the baseline distribution parameters (the
+#'   auxiliary parameters the tidier keeps out of the ratio column).
 #' @param power A `list` power verdict from [survkit_power()].
 #' @param formula The model formula.
 #' @param call The originating call.
 #'
 #' @return A `survkit_fit` S7 object.
+#' @seealso [survkit()] (constructs this object), [survkit_tidy()],
+#'   [survkit_curve()] (consume it).
 #' @export
 survkit_fit <- S7::new_class(
   "survkit_fit",
@@ -40,6 +48,8 @@ survkit_fit <- S7::new_class(
     loglik = S7::new_property(S7::class_numeric, default = NA_real_),
     n = S7::class_integer,
     n_events = S7::class_integer,
+    ratio_type = S7::new_property(S7::class_character, default = NA_character_),
+    aux_pars = S7::new_property(S7::class_character, default = character(0)),
     power = S7::new_property(S7::class_list, default = list()),
     formula = S7::new_property(S7::class_any, default = NULL),
     call = S7::new_property(S7::class_any, default = NULL)
@@ -61,6 +71,7 @@ survkit_fit <- S7::new_class(
 #' @param seed Integer RNG seed.
 #'
 #' @return A `survkit_manifest` S7 object.
+#' @seealso [as_survkit_manifest()], which constructs this object.
 #' @export
 survkit_manifest <- S7::new_class(
   "survkit_manifest",

@@ -14,6 +14,8 @@ survkit_fit(
   loglik = NA_real_,
   n = integer(0),
   n_events = integer(0),
+  ratio_type = NA_character_,
+  aux_pars = character(0),
   power = list(),
   formula = NULL,
   call = NULL
@@ -22,8 +24,9 @@ survkit_fit(
 \arguments{
 \item{method}{Character method name (a registry key, e.g. \code{"weibull"}).}
 
-\item{kind}{Character method family (\code{"parametric"}, \code{"cox"},
-\code{"competing"}, \code{"recurrent"}, \code{"frailty"}, \code{"spline"}).}
+\item{kind}{Character method family: one of \code{"parametric"}, \code{"spline"},
+\code{"nonparametric"}, \code{"cox"}, \code{"frailty"}, \code{"competing"}, \code{"recurrent"},
+\code{"cure"} or \code{"interval"}.}
 
 \item{backend}{Character name of the package that produced the fit.}
 
@@ -39,6 +42,13 @@ survkit_fit(
 
 \item{n_events}{Integer number of events (non-censored).}
 
+\item{ratio_type}{Character code for how an exponentiated covariate
+coefficient reads: \code{"HR"} (hazard ratio), \code{"TR"} (time ratio), \code{"OR"}
+(odds ratio), \code{"probit"}, or \code{NA} when the fit has no such coefficients.}
+
+\item{aux_pars}{Character names of the baseline distribution parameters (the
+auxiliary parameters the tidier keeps out of the ratio column).}
+
 \item{power}{A \code{list} power verdict from \code{\link[=survkit_power]{survkit_power()}}.}
 
 \item{formula}{The model formula.}
@@ -53,4 +63,8 @@ An S7 object returned by \code{\link[=survkit]{survkit()}}. It normalises every 
 one shape: the method and kind, the raw backend fit (kept for backend-specific
 follow-up), the coefficient vector and covariance, the log-likelihood, the
 sample and event counts, and the small-sample power verdict.
+}
+\seealso{
+\code{\link[=survkit]{survkit()}} (constructs this object), \code{\link[=survkit_tidy]{survkit_tidy()}},
+\code{\link[=survkit_curve]{survkit_curve()}} (consume it).
 }

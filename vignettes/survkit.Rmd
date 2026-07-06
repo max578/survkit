@@ -87,6 +87,46 @@ fg <- survkit(survival::Surv(etime, event) ~ age + sex, mg,
 survkit_tidy(fg)
 ```
 
+## Cumulative incidence
+
+For competing risks the Aalen-Johansen cumulative incidence of each event is one
+call, and it accounts for the competing event rather than treating it as
+censoring:
+
+```{r}
+ci <- survkit_cuminc(survival::Surv(etime, event) ~ 1, mg)
+head(ci)
+```
+
+## Decision-relevant summaries
+
+The restricted mean survival time is the area under the survival curve to a
+horizon, a summary that stays defined when the median is never reached:
+
+```{r}
+km <- survkit(survival::Surv(time, status) ~ 1, survival::lung, method = "km")
+survkit_rmst(km, tau = 365)
+```
+
+Predictions can be scored for discrimination and calibration. The concordance,
+the censoring-weighted Brier score, and its index of prediction accuracy come
+back together:
+
+```{r}
+survkit_score(cox, survival::lung, times = c(200, 400, 600))
+```
+
+## Triangulating across methods
+
+Fitting the same question several ways is the honesty check survkit is built
+for. When the methods disagree on what a decision turns on, at least one of them
+is misspecified:
+
+```{r}
+survkit_triangulate(survival::Surv(time, status) ~ age + sex, survival::lung,
+                    methods = c("weibull", "cox", "km"), tau = 500)
+```
+
 ## Extending the toolkit
 
 Adding a method is one registry call; the public interface does not change.

@@ -17,10 +17,11 @@ as_survkit_manifest(
 
 \item{n_draws}{Integer number of draws (default \code{200L}).}
 
-\item{times}{Optional numeric time grid for predicted-survival outputs; \code{NULL}
+\item{times}{Optional numeric time grid for the survival outputs. \code{NULL}
 (default) emits a parameters-only manifest.}
 
-\item{newdata}{Optional single covariate profile for the survival outputs.}
+\item{newdata}{Optional single covariate profile (one row) for the survival
+outputs. Required for the per-draw survival ensemble.}
 
 \item{seed}{Optional integer RNG seed (recorded in the manifest).}
 }
@@ -29,14 +30,27 @@ A \link{survkit_manifest} object.
 }
 \description{
 Produce a draw ensemble for orchestra composition. Coefficients are drawn from
-their Gaussian sampling approximation (mean = estimate, covariance = \code{vcov});
-the result is shaped to the ensemble-manifest contract (a parameter draw frame
-with provenance), so a \code{pesto_ensemble_manifest}-compatible adapter can consume
-it. Optionally evaluates predicted survival on a time grid per draw.
+their Gaussian sampling approximation (mean = estimate, covariance = \code{vcov}),
+and the result is shaped to the ensemble-manifest contract (a parameter draw
+frame with provenance) so a \code{pesto_ensemble_manifest}-compatible adapter can
+consume it.
+}
+\details{
+When \code{times} and a single-profile \code{newdata} are given and the fit is
+parametric, spline or cure, the \code{outputs} slot carries a genuine per-draw
+survival ensemble: the draws come from the backend's own sampling
+distribution and each draw's survival is evaluated through the fitted
+distribution function, so \code{params} and \code{outputs} share the same draws. For a
+Cox-family or non-parametric fit a per-draw survival ensemble would also need
+the baseline-hazard uncertainty, so \code{outputs} instead holds the
+maximum-likelihood survival curve marked with \code{draw = 0}.
 }
 \examples{
 fit <- survkit(survival::Surv(time, status) ~ age, survival::lung, method = "weibull")
 m <- as_survkit_manifest(fit, n_draws = 50L, seed = 1L)
 nrow(m@params)
 
+}
+\seealso{
+\link{survkit_manifest} for the returned class, \code{\link[=survkit]{survkit()}} for the fit.
 }

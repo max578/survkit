@@ -16,3 +16,12 @@ List the registered methods
 \examples{
 survkit_methods()
 }
+\seealso{
+\code{\link[=survkit_register]{survkit_register()}} to add a method.
+
+Other method-registry: 
+\code{\link{survkit_contract}()},
+\code{\link{survkit_register}()},
+\code{\link{survkit_validate_method}()}
+}
+\concept{method-registry}

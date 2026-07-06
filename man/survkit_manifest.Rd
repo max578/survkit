@@ -35,3 +35,6 @@ draw ensemble of parameters and predicted survival, with provenance. Produced
 by \code{\link[=as_survkit_manifest]{as_survkit_manifest()}}; convertible to a \code{pesto_ensemble_manifest} when
 that contract is available (see the manifest emitter).
 }
+\seealso{
+\code{\link[=as_survkit_manifest]{as_survkit_manifest()}}, which constructs this object.
+}

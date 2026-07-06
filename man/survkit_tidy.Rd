@@ -9,17 +9,31 @@ survkit_tidy(fit, conf_level = 0.95)
 \arguments{
 \item{fit}{A \link{survkit_fit}.}
 
-\item{conf_level}{Confidence level (default \code{0.95}).}
+\item{conf_level}{Confidence level for the Wald interval (default \code{0.95}).}
 }
 \value{
-A data frame: \code{term}, \code{estimate}, \code{std_error}, \code{ratio},
-\code{conf_low}, \code{conf_high}.
+A data frame with columns \code{term}, \code{component}
+(\code{"covariate"} / \code{"auxiliary"}), \code{estimate}, \code{std_error}, \code{ratio_type},
+\code{ratio}, \code{conf_low} and \code{conf_high}. For auxiliary parameters \code{ratio_type},
+\code{ratio} and the interval are \code{NA}.
 }
 \description{
-Estimates with standard errors, hazard / time ratios (the exponentiated
-coefficient) and Wald confidence intervals.
+Return the coefficient table with standard errors, the exponentiated effect
+and Wald confidence intervals. Covariate rows and baseline distribution
+parameters are separated by a \code{component} column, and the \code{ratio_type} column
+records whether a covariate effect reads as a hazard ratio (proportional
+hazards) or a time ratio (accelerated failure time). Auxiliary parameters (a
+log-scale, a shape) are never exponentiated into the ratio column, so a
+parametric fit no longer reports a meaningless "ratio" for its scale.
 }
 \examples{
 fit <- survkit(survival::Surv(time, status) ~ age + sex, survival::lung, method = "cox")
 survkit_tidy(fit)
 }
+\seealso{
+\code{\link[=survkit_curve]{survkit_curve()}} for predicted survival.
+
+Other fit-methods: 
+\code{\link{survkit_curve}()}
+}
+\concept{fit-methods}

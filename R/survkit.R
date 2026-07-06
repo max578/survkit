@@ -23,7 +23,7 @@
 #'
 #' @return A [survkit_fit] object.
 #'
-#' @examples
+#' @examplesIf requireNamespace("flexsurv", quietly = TRUE)
 #' df <- survival::lung
 #' fit <- survkit(survival::Surv(time, status) ~ age + sex, df, method = "weibull")
 #' fit

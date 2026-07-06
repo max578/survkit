@@ -33,7 +33,7 @@
 #'
 #' @returns A [survkit_manifest] object.
 #'
-#' @examples
+#' @examplesIf requireNamespace("flexsurv", quietly = TRUE)
 #' fit <- survkit(survival::Surv(time, status) ~ age, survival::lung, method = "weibull")
 #' m <- as_survkit_manifest(fit, n_draws = 50L, seed = 1L)
 #' nrow(m@params)

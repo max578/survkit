@@ -35,8 +35,10 @@ function and support every \code{type}; Cox-family and non-parametric fits use
 \code{survival::survfit()} and support the survival curve.
 }
 \examples{
+\dontshow{if (requireNamespace("flexsurv", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 fit <- survkit(survival::Surv(time, status) ~ age, survival::lung, method = "weibull")
 head(survkit_curve(fit, times = c(100, 300, 500)))
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=survkit_tidy]{survkit_tidy()}} for the coefficient table, \code{\link[=survkit_rmst]{survkit_rmst()}} for the

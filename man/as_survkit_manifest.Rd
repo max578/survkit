@@ -46,10 +46,11 @@ the baseline-hazard uncertainty, so \code{outputs} instead holds the
 maximum-likelihood survival curve marked with \code{draw = 0}.
 }
 \examples{
+\dontshow{if (requireNamespace("flexsurv", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 fit <- survkit(survival::Surv(time, status) ~ age, survival::lung, method = "weibull")
 m <- as_survkit_manifest(fit, n_draws = 50L, seed = 1L)
 nrow(m@params)
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \link{survkit_manifest} for the returned class, \code{\link[=survkit]{survkit()}} for the fit.

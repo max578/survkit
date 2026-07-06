@@ -31,7 +31,7 @@
 #'
 #' @returns A `survkit_triangulation` list with the per-method quantities, the
 #'   disagreement summary, and a logical `flagged`. It has a `print` method.
-#' @examples
+#' @examplesIf requireNamespace("flexsurv", quietly = TRUE)
 #' tri <- survkit_triangulate(survival::Surv(time, status) ~ age + sex,
 #'                            survival::lung, methods = c("weibull", "cox", "km"),
 #'                            tau = 500)

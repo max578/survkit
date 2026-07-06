@@ -44,11 +44,12 @@ arguments in \code{...} pass straight to the backend estimator, so any backend
 option remains reachable.
 }
 \examples{
+\dontshow{if (requireNamespace("flexsurv", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 df <- survival::lung
 fit <- survkit(survival::Surv(time, status) ~ age + sex, df, method = "weibull")
 fit
 coef(fit)
-
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=survkit_methods]{survkit_methods()}} for the registry, \code{\link[=survkit_power]{survkit_power()}} for the gate.

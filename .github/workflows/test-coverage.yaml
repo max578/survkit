@@ -36,9 +36,12 @@ jobs:
           covr::to_cobertura(cov)
         shell: Rscript {0}
 
+      # Non-blocking: the upload needs a CODECOV_TOKEN secret (this repo is
+      # private). Coverage is computed and reported regardless; the job does not
+      # fail CI when the token is absent.
       - uses: codecov/codecov-action@v4
         with:
-          fail_ci_if_error: ${{ github.event_name != 'pull_request' }}
+          fail_ci_if_error: false
           file: ./cobertura.xml
           plugin: noop
           disable_search: true

@@ -129,7 +129,7 @@ survkit_tidy <- function(fit, conf_level = 0.95) {
 #'
 #' @returns A data frame with `time`, `value` (named for `type` when returned by
 #'   the backend) and a `profile` index.
-#' @examples
+#' @examplesIf requireNamespace("flexsurv", quietly = TRUE)
 #' fit <- survkit(survival::Surv(time, status) ~ age, survival::lung, method = "weibull")
 #' head(survkit_curve(fit, times = c(100, 300, 500)))
 #' @family fit-methods

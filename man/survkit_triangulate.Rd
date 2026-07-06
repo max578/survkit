@@ -49,10 +49,12 @@ time). The relative spread across methods is a model-misspecification signal:
 when the methods disagree by more than \code{threshold}, the fit is flagged.
 }
 \examples{
+\dontshow{if (requireNamespace("flexsurv", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 tri <- survkit_triangulate(survival::Surv(time, status) ~ age + sex,
                            survival::lung, methods = c("weibull", "cox", "km"),
                            tau = 500)
 tri
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=survkit_rmst]{survkit_rmst()}} for the quantity compared, \code{\link[=survkit]{survkit()}} for a single

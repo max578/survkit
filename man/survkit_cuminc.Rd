@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimands.R
 \name{survkit_cuminc}
 \alias{survkit_cuminc}
-\title{Cumulative incidence for competing risks}
+\title{Compute cumulative incidence for competing risks}
 \usage{
 survkit_cuminc(formula, data, ...)
 }
@@ -39,8 +39,10 @@ head(ci)
 subdistribution hazard.
 
 Other model-fitting: 
+\code{\link{is_survkit_refusal}()},
 \code{\link{survkit}()},
 \code{\link{survkit_power}()},
+\code{\link{survkit_refusal}()},
 \code{\link{survkit_rmst}()},
 \code{\link{survkit_score}()},
 \code{\link{survkit_triangulate}()}

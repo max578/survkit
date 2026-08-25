@@ -33,3 +33,30 @@ test_that("check_power = FALSE skips the gate and never warns", {
                    method = "cox", check_power = FALSE))
   expect_identical(fit@power$verdict, "unchecked")
 })
+
+test_that("on_underpowered = 'abstain' returns a classed refusal, not a fit", {
+  df <- .fx_lung()[1:25, ]
+  decl <- survkit(survival::Surv(time, status) ~ age + sex + ph.ecog, df,
+                   method = "cox", on_underpowered = "abstain")
+  expect_s3_class(decl, "survkit_refusal")
+  expect_true(any(grepl("_(refusal|abstention)$", class(decl))))
+  expect_true(decl$underpowered)
+  expect_identical(decl$min_epv, 10)
+  expect_true(decl$events_per_variable < 10)
+  expect_true(is.character(decl$reason))
+})
+
+test_that("print.survkit_refusal dispatches for a caller (not just inside the namespace)", {
+  df <- .fx_lung()[1:25, ]
+  decl <- survkit(survival::Surv(time, status) ~ age + sex + ph.ecog, df,
+                   method = "cox", on_underpowered = "abstain")
+  expect_identical(getS3method("print", "survkit_refusal", envir = baseenv()),
+                   survkit:::print.survkit_refusal)
+  expect_output(print(decl), "survkit_refusal")
+})
+
+test_that("on_underpowered = 'abstain' still fits a well-powered model", {
+  fit <- survkit(survival::Surv(time, status) ~ age + sex, .fx_lung(),
+                 method = "cox", on_underpowered = "abstain")
+  expect_true(S7::S7_inherits(fit, survkit_fit))
+})

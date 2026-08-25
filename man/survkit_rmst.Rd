@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimands.R
 \name{survkit_rmst}
 \alias{survkit_rmst}
-\title{Restricted mean survival time}
+\title{Compute the restricted mean survival time}
 \usage{
 survkit_rmst(fit, tau, newdata = NULL)
 }
@@ -26,6 +26,13 @@ the backend's own RMST with its delta-method interval; Cox-family and
 non-parametric fits use the area under \code{survival::survfit()} with its standard
 error.
 }
+\details{
+\deqn{RMST(\tau) = \int_0^{\tau} S(t)\,dt}
+where \eqn{S(t)} is the (model-based or Kaplan-Meier) survival function.
+Restricting the integral to \eqn{[0, \tau]} keeps the summary defined and
+identifiable from the observed follow-up even when the survival curve
+never crosses one-half.
+}
 \examples{
 fit <- survkit(survival::Surv(time, status) ~ 1, survival::lung, method = "km")
 survkit_rmst(fit, tau = 365)
@@ -34,9 +41,11 @@ survkit_rmst(fit, tau = 365)
 \code{\link[=survkit_curve]{survkit_curve()}} for the curve the mean integrates.
 
 Other model-fitting: 
+\code{\link{is_survkit_refusal}()},
 \code{\link{survkit}()},
 \code{\link{survkit_cuminc}()},
 \code{\link{survkit_power}()},
+\code{\link{survkit_refusal}()},
 \code{\link{survkit_score}()},
 \code{\link{survkit_triangulate}()}
 }

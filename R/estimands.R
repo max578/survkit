@@ -5,7 +5,7 @@
 # curve to a horizon). Both are the quantities a decision actually turns on, and
 # both read straight off the established survival machinery.
 
-#' Cumulative incidence for competing risks
+#' Compute cumulative incidence for competing risks
 #'
 #' The Aalen-Johansen estimator of the cumulative incidence function for each
 #' competing event, computed from a multi-state `survival::survfit()`. Unlike one
@@ -63,7 +63,7 @@ survkit_cuminc <- function(formula, data, ...) {
   out
 }
 
-#' Restricted mean survival time
+#' Compute the restricted mean survival time
 #'
 #' The restricted mean survival time (RMST) to a horizon `tau`: the area under
 #' the survival curve on `[0, tau]`, a decision-relevant summary that stays
@@ -79,6 +79,14 @@ survkit_cuminc <- function(formula, data, ...) {
 #'
 #' @returns A data frame with `tau`, `group` (or `profile`), `rmst`, `se`,
 #'   `conf_low` and `conf_high`.
+#'
+#' @details
+#' \deqn{RMST(\tau) = \int_0^{\tau} S(t)\,dt}
+#' where \eqn{S(t)} is the (model-based or Kaplan-Meier) survival function.
+#' Restricting the integral to \eqn{[0, \tau]} keeps the summary defined and
+#' identifiable from the observed follow-up even when the survival curve
+#' never crosses one-half.
+#'
 #' @examples
 #' fit <- survkit(survival::Surv(time, status) ~ 1, survival::lung, method = "km")
 #' survkit_rmst(fit, tau = 365)

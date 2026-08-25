@@ -1,3 +1,34 @@
+# survkit (development version)
+
+* Vignette (*Getting started with survkit*) gains three figures with captions
+  and interpretive prose: a Kaplan-Meier curve by age group, a stacked
+  cumulative-incidence plot for the competing-risks example, and a
+  "triangulation fan" plotting each method's restricted mean survival time
+  against the disagreement band. It also states the governing equations for
+  the events-per-variable gate, the restricted mean survival time and the
+  IPCW Brier score, each with its source citation, and rewords the
+  triangulation section so it no longer asserts that a flagged disagreement
+  proves model misspecification (it can also arise from comparing different
+  estimands, which the vignette now says explicitly).
+* `README.md` leads with the package's purpose in the first lines, and every
+  code snippet is now self-contained and runnable end-to-end on
+  `survival::lung` / `survival::mgus2` (the Fine-Gray, small-sample-gate and
+  scoring snippets previously referenced undefined objects).
+* Roxygen: several `@title`s rewritten as sentences/imperatives rather than
+  noun phrases (`survkit_power`, `survkit_fit`, `survkit_manifest`,
+  `survkit_contract`, `survkit_cuminc`, `survkit_rmst`, `survkit_curve`);
+  `@examples` added for `survkit_fit`, `survkit_manifest` and the `predict`
+  method on a fit (previously undocumented by example); `@references` added
+  to `survkit_power` and `survkit_score`; governing-equation `@details`
+  added to `survkit_rmst` and `survkit_score`.
+* `survkit()` gains an `on_underpowered = c("warn", "abstain")` argument.
+  `"warn"` preserves the historical behaviour (fit anyway, with a warning);
+  `"abstain"` declines to fit an under-powered model and instead returns a
+  [survkit_refusal()] -- a typed, classed token (`c("survkit_refusal",
+  "orchestra_refusal", "error", "condition")`) recognisable to a leader-side
+  gate via `is_orchestra_decline()`, rather than a bare `warning()` plus a
+  fitted model regardless of the power gate's verdict.
+
 # survkit 0.1.0
 
 First public release. The registry-dispatched facade of the development scaffold

@@ -2,7 +2,7 @@
 % Please edit documentation in R/conformance.R
 \name{survkit_contract}
 \alias{survkit_contract}
-\title{The registry conformance contract}
+\title{Describe the registry conformance contract}
 \usage{
 survkit_contract()
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/abstention.R
 \name{survkit_power}
 \alias{survkit_power}
-\title{Small-sample power gate (events per variable)}
+\title{Assess a fit's small-sample power (events per variable)}
 \usage{
 survkit_power(formula, data, min_epv = 10)
 }
@@ -37,12 +37,20 @@ df <- data.frame(time = rexp(40), status = rbinom(40, 1, 0.3),
 survkit_power(survival::Surv(time, status) ~ x1 + x2, df)$verdict
 
 }
+\references{
+Peduzzi P, Concato J, Kemper E, Holford TR, Feinstein AR. A simulation
+study of the number of events per variable in logistic regression
+analysis (bibliographic detail as cited in this package's source; not
+independently re-verified here — \verb{[unverified]}).
+}
 \seealso{
 \code{\link[=survkit]{survkit()}}, which runs this gate on every fit.
 
 Other model-fitting: 
+\code{\link{is_survkit_refusal}()},
 \code{\link{survkit}()},
 \code{\link{survkit_cuminc}()},
+\code{\link{survkit_refusal}()},
 \code{\link{survkit_rmst}()},
 \code{\link{survkit_score}()},
 \code{\link{survkit_triangulate}()}

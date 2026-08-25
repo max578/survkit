@@ -1,13 +1,15 @@
 # survkit
 
+> A unified, extensible toolkit for time-to-event analysis: one interface over
+> the established R survival stack, with cross-method triangulation as the
+> honesty check on top.
+
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/max578/survkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/max578/survkit/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/max578/survkit/graph/badge.svg)](https://app.codecov.io/gh/max578/survkit)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
-
-> A unified, extensible toolkit for time-to-event analysis.
 
 `survkit` puts one clean interface over the established R survival stack —
 parametric accelerated-failure-time models, Cox proportional hazards, competing
@@ -60,11 +62,17 @@ survkit_tidy(fit)                      # estimates, ratios, CIs
 survkit_curve(fit, times = c(100, 300, 500))
 
 # Cox proportional hazards on the same data
-survkit(survival::Surv(time, status) ~ age + sex, survival::lung, method = "cox")
+cox <- survkit(survival::Surv(time, status) ~ age + sex, survival::lung,
+               method = "cox")
 
 # competing risks (Fine-Gray subdistribution hazard)
 # event is a factor: first level = censoring
-survkit(survival::Surv(etime, event) ~ age + sex, data, method = "fine_gray",
+mg <- survival::mgus2
+mg$etime <- with(mg, ifelse(pstat == 1, ptime, futime))
+mg$event <- with(mg, factor(ifelse(pstat == 1, "pcm",
+                            ifelse(death == 1, "death", "censor")),
+                            levels = c("censor", "pcm", "death")))
+survkit(survival::Surv(etime, event) ~ age + sex, mg, method = "fine_gray",
         cause = "pcm")
 ```
 
@@ -75,6 +83,7 @@ events-per-variable check on every fit and warns when a model is under-powered,
 so you can simplify, penalise, or abstain rather than trust over-fit estimates:
 
 ```r
+small_data <- survival::lung[1:25, ]
 survkit_power(survival::Surv(time, status) ~ age + sex + ph.ecog, small_data)
 #> $verdict        "underpowered"
 #> $events_per_variable  7.3
@@ -83,7 +92,7 @@ survkit_power(survival::Surv(time, status) ~ age + sex + ph.ecog, small_data)
 ## Triangulate across methods
 
 Fit the same question under several methods and let their disagreement flag a
-misspecified model:
+model worth a closer look:
 
 ```r
 survkit_triangulate(survival::Surv(time, status) ~ age + sex, survival::lung,

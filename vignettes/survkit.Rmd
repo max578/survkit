@@ -8,7 +8,8 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>", fig.width = 6,
+                      fig.height = 4.2, dpi = 110)
 set.seed(1L)
 ```
 
@@ -60,8 +61,12 @@ survkit_tidy(cox)
 
 ## The small-sample gate
 
-Survival models identify from events, not rows. On a small subset the
-events-per-variable gate flags the fit as under-powered:
+Survival models identify from events, not rows. Peduzzi et al.'s
+events-per-variable (EPV) heuristic --
+$$\mathrm{EPV} = \dfrac{\text{number of events}}{\text{number of predictors}},$$
+with $\mathrm{EPV} \geq 10$ as the conventional floor -- is the standard guard
+against coefficients and standard errors that cannot be trusted from too few
+failures. On a small subset the gate flags the fit as under-powered:
 
 ```{r}
 small <- survival::lung[1:25, ]
@@ -70,6 +75,31 @@ survkit_power(survival::Surv(time, status) ~ age + sex + ph.ecog, small)
 
 `survkit()` runs this automatically and warns, so you can simplify, penalise, or
 abstain rather than trust over-fit estimates.
+
+## Visualising a fit
+
+The step curve is the picture the summary numbers are drawn from. Fitting a
+Kaplan-Meier baseline and plotting it against age group shows why: the two
+groups' curves separate early and stay separated, which is the pattern a
+Cox or Weibull regression on `age` is trying to summarise as one hazard ratio
+or time ratio.
+
+```{r fig-km, fig.cap = "Kaplan-Meier survival by age group (lung cancer trial). The confidence bands are pointwise 95 percent intervals. The older group's curve sits below the younger group's for the whole follow-up, so a single time-invariant hazard or time ratio is a defensible summary here -- the curves neither cross nor converge."}
+lung2 <- survival::lung
+lung2$age_group <- factor(ifelse(lung2$age >= stats::median(lung2$age),
+                                 "older", "younger"),
+                          levels = c("younger", "older"))
+km_fit <- survival::survfit(survival::Surv(time, status) ~ age_group, lung2)
+plot(km_fit, col = c("#1b9e77", "#d95f02"), lwd = 2, conf.int = TRUE,
+    xlab = "Days", ylab = "Survival probability",
+    main = "Kaplan-Meier survival by age group")
+legend("bottomleft", legend = levels(lung2$age_group),
+      col = c("#1b9e77", "#d95f02"), lwd = 2, bty = "n")
+```
+
+The two curves separate within the first 100 days and the gap holds out to
+the point where the risk set is too thin to say more -- there is no crossing
+that would signal a genuinely time-varying age effect.
 
 ## Competing risks
 
@@ -98,19 +128,54 @@ ci <- survkit_cuminc(survival::Surv(etime, event) ~ 1, mg)
 head(ci)
 ```
 
+Stacking the two causes' cumulative incidence shows how much of the total
+event probability each accounts for at any time, and confirms that the two
+curves sum to a proper (non-decreasing, bounded) overall failure probability:
+
+```{r fig-cif, fig.cap = "Aalen-Johansen cumulative incidence of plasma-cell malignancy and death, stacked so the top line is the overall failure probability. Death dominates the overall event probability throughout follow-up, and pcm's cumulative incidence rises far more slowly -- exactly the separation the Fine-Gray hazard above is summarising."}
+pcm <- ci[ci$cause == "pcm", c("time", "cif")]
+death <- ci[ci$cause == "death", c("time", "cif")]
+grid_t <- sort(unique(c(pcm$time, death$time)))
+pcm_y <- stats::approx(pcm$time, pcm$cif, xout = grid_t, method = "constant",
+                       rule = 2)$y
+death_y <- stats::approx(death$time, death$cif, xout = grid_t,
+                         method = "constant", rule = 2)$y
+plot(grid_t, pcm_y + death_y, type = "s", col = "#7570b3", lwd = 2,
+    xlab = "Days", ylab = "Cumulative incidence",
+    main = "Stacked cumulative incidence: pcm and death",
+    ylim = c(0, max(pcm_y + death_y)))
+lines(grid_t, pcm_y, type = "s", col = "#1b9e77", lwd = 2)
+legend("topleft", legend = c("pcm", "pcm + death"),
+      col = c("#1b9e77", "#7570b3"), lwd = 2, bty = "n")
+```
+
 ## Decision-relevant summaries
 
-The restricted mean survival time is the area under the survival curve to a
-horizon, a summary that stays defined when the median is never reached:
+The restricted mean survival time (RMST) to a horizon $\tau$ is the area under
+the survival curve on $[0, \tau]$,
+$$\mathrm{RMST}(\tau) = \int_0^{\tau} S(t)\,dt,$$
+a summary that stays defined when the median is never reached:
 
 ```{r}
 km <- survkit(survival::Surv(time, status) ~ 1, survival::lung, method = "km")
 survkit_rmst(km, tau = 365)
 ```
 
-Predictions can be scored for discrimination and calibration. The concordance,
-the censoring-weighted Brier score, and its index of prediction accuracy come
-back together:
+Predictions can be scored for discrimination and calibration. The concordance
+index, the censoring-weighted (IPCW) Brier score, and its index of prediction
+accuracy are returned together. The Brier score at horizon $t$ weights each
+subject by the inverse probability of *not* being censored by $t$,
+$$
+BS(t) = \frac{1}{n}\sum_{i=1}^n \left[
+  \frac{\big(0-\hat S(t\mid x_i)\big)^2}{\hat G(T_i)}\,
+  \mathbf{1}(T_i \leq t,\ \delta_i = 1) +
+  \frac{\big(1-\hat S(t\mid x_i)\big)^2}{\hat G(t)}\,
+  \mathbf{1}(T_i > t) \right],
+$$
+where $\hat S$ is the predicted survival probability and $\hat G$ is the
+Kaplan-Meier estimator of the censoring distribution (Graf et al. 1999); the
+index of prediction accuracy, $IPA(t) = 1 - BS(t)/BS_0(t)$, rescales against a
+covariate-free reference $BS_0$:
 
 ```{r}
 survkit_score(cox, survival::lung, times = c(200, 400, 600))
@@ -119,12 +184,40 @@ survkit_score(cox, survival::lung, times = c(200, 400, 600))
 ## Triangulating across methods
 
 Fitting the same question several ways is the honesty check survkit is built
-for. When the methods disagree on what a decision turns on, at least one of them
-is misspecified:
+for: methods that make different distributional assumptions about the same
+hazard should still land near the same restricted mean survival time. When they
+disagree by more than a `threshold` relative spread, the fit is flagged --
+either because the shape of the hazard has been misspecified by at least one
+of the methods, or because the compared quantities are not actually the same
+estimand (a marginal curve compared against a curve at a reference covariate
+profile, for instance). A flag is a prompt to check which of the two it is, not
+a verdict on its own:
 
 ```{r}
-survkit_triangulate(survival::Surv(time, status) ~ age + sex, survival::lung,
-                    methods = c("weibull", "cox", "km"), tau = 500)
+tri <- survkit_triangulate(survival::Surv(time, status) ~ age + sex,
+                           survival::lung,
+                           methods = c("weibull", "cox", "km"), tau = 500)
+tri$rmst
+tri$flagged
+```
+
+Plotting each method's restricted mean as a point, with the disagreement band
+drawn at `threshold` around their mean, makes the same table easier to read at
+a glance -- this "triangulation fan" is the single picture that would have
+shown a real disagreement immediately, rather than requiring a table lookup:
+
+```{r fig-fan, fig.cap = "Triangulation fan: restricted mean survival time to tau = 500 days under three methods, with the shaded band spanning the mean plus or minus half the relative-spread threshold. All three estimates fall inside the band, matching the printed `flagged = FALSE` verdict above -- weibull, Cox and Kaplan-Meier concur within tolerance on this fit."}
+band_half <- tri$threshold * mean(tri$rmst$rmst) / 2
+band_mid <- mean(tri$rmst$rmst)
+plot(seq_len(nrow(tri$rmst)), tri$rmst$rmst, pch = 19, cex = 1.4,
+    col = "#1b9e77", xaxt = "n", xlab = "Method", ylab = "RMST (days)",
+    xlim = c(0.5, nrow(tri$rmst) + 0.5),
+    ylim = range(c(tri$rmst$rmst, band_mid - band_half, band_mid + band_half)),
+    main = sprintf("Triangulated RMST at tau = %d", tri$tau))
+axis(1, at = seq_len(nrow(tri$rmst)), labels = tri$rmst$method)
+rect(0.5, band_mid - band_half, nrow(tri$rmst) + 0.5, band_mid + band_half,
+    col = grDevices::adjustcolor("#7570b3", alpha.f = 0.15), border = NA)
+abline(h = band_mid, lty = 2, col = "#7570b3")
 ```
 
 ## Extending the toolkit

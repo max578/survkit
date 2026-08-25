@@ -19,9 +19,17 @@
 #' @param ... Passed to the backend estimator.
 #' @param check_power Logical; run the events-per-variable gate (default `TRUE`).
 #' @param warn_underpowered Logical; warn when the gate flags the model
-#'   under-powered (default `TRUE`).
+#'   under-powered (default `TRUE`). Ignored when `on_underpowered =
+#'   "abstain"`.
+#' @param on_underpowered One of `"warn"` (default) or `"abstain"`. `"warn"`
+#'   preserves the historical behaviour: the model is fitted regardless, with
+#'   a warning when `warn_underpowered` is `TRUE`. `"abstain"` declines to
+#'   fit at all when the gate flags the model under-powered, returning a
+#'   [survkit_refusal()] instead -- the typed token an orchestra-level caller
+#'   can recognise via `is_orchestra_decline()`.
 #'
-#' @return A [survkit_fit] object.
+#' @return A [survkit_fit] object, or a [survkit_refusal()] when
+#'   `on_underpowered = "abstain"` and the power gate is not satisfied.
 #'
 #' @examplesIf requireNamespace("flexsurv", quietly = TRUE)
 #' df <- survival::lung
@@ -33,7 +41,9 @@
 #' @seealso [survkit_methods()] for the registry, [survkit_power()] for the gate.
 #' @export
 survkit <- function(formula, data, method = "weibull", ...,
-                    check_power = TRUE, warn_underpowered = TRUE) {
+                    check_power = TRUE, warn_underpowered = TRUE,
+                    on_underpowered = c("warn", "abstain")) {
+  on_underpowered <- match.arg(on_underpowered)
   spec <- .survkit_lookup(method)
   .survkit_require(spec$backend, method)
 
@@ -42,8 +52,13 @@ survkit <- function(formula, data, method = "weibull", ...,
   } else {
     list(verdict = "unchecked")
   }
-  if (isTRUE(check_power) && isTRUE(power$underpowered) && isTRUE(warn_underpowered)) {
-    warning("survkit(): ", power$advice, call. = FALSE)
+  if (isTRUE(check_power) && isTRUE(power$underpowered)) {
+    if (identical(on_underpowered, "abstain")) {
+      return(survkit_refusal(power))
+    }
+    if (isTRUE(warn_underpowered)) {
+      warning("survkit(): ", power$advice, call. = FALSE)
+    }
   }
 
   res <- spec$fit(formula, data, ...)

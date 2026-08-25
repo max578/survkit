@@ -18,7 +18,7 @@
   backend = function(v) is.character(v) && length(v) == 1L
 )
 
-#' The registry conformance contract
+#' Describe the registry conformance contract
 #'
 #' Return the field-level contract that every registered `fit` closure must
 #' honour: the names of the fields a normalised fit result carries, so that

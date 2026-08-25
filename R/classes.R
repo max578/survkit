@@ -5,7 +5,7 @@
 # (`survkit_manifest`) carries the ensemble-manifest emission for orchestra
 # composition; it is self-contained so the package stays standalone.
 
-#' The fitted-model class
+#' Represent a fitted survival model
 #'
 #' An S7 object returned by [survkit()]. It normalises every backend's output to
 #' one shape: the method and kind, the raw backend fit (kept for backend-specific
@@ -35,6 +35,11 @@
 #' @return A `survkit_fit` S7 object.
 #' @seealso [survkit()] (constructs this object), [survkit_tidy()],
 #'   [survkit_curve()] (consume it).
+#' @examples
+#' fit <- survkit(survival::Surv(time, status) ~ age + sex, survival::lung,
+#'                method = "cox")
+#' fit@method
+#' fit@n_events
 #' @export
 survkit_fit <- S7::new_class(
   "survkit_fit",
@@ -56,7 +61,7 @@ survkit_fit <- S7::new_class(
   )
 )
 
-#' The ensemble-manifest class
+#' Represent an ensemble-manifest emission
 #'
 #' A self-contained, manifest-compatible emission for orchestra composition: a
 #' draw ensemble of parameters and predicted survival, with provenance. Produced
@@ -72,6 +77,11 @@ survkit_fit <- S7::new_class(
 #'
 #' @return A `survkit_manifest` S7 object.
 #' @seealso [as_survkit_manifest()], which constructs this object.
+#' @examplesIf requireNamespace("flexsurv", quietly = TRUE)
+#' fit <- survkit(survival::Surv(time, status) ~ age, survival::lung,
+#'                method = "weibull")
+#' man <- as_survkit_manifest(fit, n_draws = 50L)
+#' man@method
 #' @export
 survkit_manifest <- S7::new_class(
   "survkit_manifest",

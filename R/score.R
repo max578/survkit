@@ -22,6 +22,27 @@
 #' @returns A data frame with `time`, `cindex` (Harrell's C using predicted risk
 #'   at that horizon), `brier` (IPCW Brier) and `ipa` (index of prediction
 #'   accuracy).
+#'
+#' @details
+#' The inverse-probability-of-censoring-weighted Brier score at horizon
+#' \eqn{t} is
+#' \deqn{BS(t) = \frac{1}{n}\sum_{i=1}^n \Big[
+#'   \frac{\big(0 - \hat S(t \mid x_i)\big)^2}{\hat G(T_i)}
+#'   \mathbf{1}(T_i \le t, \delta_i = 1) +
+#'   \frac{\big(1 - \hat S(t \mid x_i)\big)^2}{\hat G(t)}
+#'   \mathbf{1}(T_i > t) \Big]}
+#' where \eqn{\hat S(\cdot \mid x_i)} is the predicted survival probability,
+#' \eqn{\hat G} is the Kaplan-Meier estimator of the *censoring* survival
+#' function, and the index of prediction accuracy is
+#' \eqn{IPA(t) = 1 - BS(t) / BS_0(t)} against a covariate-free reference
+#' \eqn{BS_0}.
+#'
+#' @references
+#' Graf E, Schmoor C, Sauerbrei W, Schumacher M. Assessment and comparison of
+#' prognostic classification schemes for survival data (bibliographic detail
+#' as cited in this package's source; not independently re-verified here —
+#' `[unverified]`).
+#'
 #' @examples
 #' fit <- survkit(survival::Surv(time, status) ~ age + sex, survival::lung,
 #'                method = "cox")

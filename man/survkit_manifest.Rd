@@ -2,7 +2,7 @@
 % Please edit documentation in R/classes.R
 \name{survkit_manifest}
 \alias{survkit_manifest}
-\title{The ensemble-manifest class}
+\title{Represent an ensemble-manifest emission}
 \usage{
 survkit_manifest(
   params = data.frame(),
@@ -34,6 +34,14 @@ A self-contained, manifest-compatible emission for orchestra composition: a
 draw ensemble of parameters and predicted survival, with provenance. Produced
 by \code{\link[=as_survkit_manifest]{as_survkit_manifest()}}; convertible to a \code{pesto_ensemble_manifest} when
 that contract is available (see the manifest emitter).
+}
+\examples{
+\dontshow{if (requireNamespace("flexsurv", quietly = TRUE)) withAutoprint(\{ # examplesIf}
+fit <- survkit(survival::Surv(time, status) ~ age, survival::lung,
+               method = "weibull")
+man <- as_survkit_manifest(fit, n_draws = 50L)
+man@method
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=as_survkit_manifest]{as_survkit_manifest()}}, which constructs this object.

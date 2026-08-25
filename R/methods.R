@@ -37,7 +37,22 @@ S7::method(logLik, survkit_fit) <- function(object, ...) {
   structure(ll, df = df, nobs = object@n, class = "logLik")
 }
 
-#' @export
+#' Predict from the raw backend fit
+#'
+#' Delegate to `stats::predict()` on the backend object underlying a
+#' [survkit_fit] (e.g. `predict.coxph()`, `predict.survreg()`), passing `...`
+#' straight through. For a backend-independent survival, hazard or quantile
+#' prediction on a common time grid, use [survkit_curve()] instead.
+#'
+#' @name predict.survkit_fit
+#' @param object A [survkit_fit].
+#' @param ... Passed to the backend's `predict` method.
+#' @returns Whatever the backend's `predict` method returns.
+#' @examples
+#' fit <- survkit(survival::Surv(time, status) ~ age + sex, survival::lung,
+#'                method = "cox")
+#' head(predict(fit, type = "lp"))
+#' @seealso [survkit_curve()] for a backend-independent prediction grid.
 S7::method(predict, survkit_fit) <- function(object, ...) {
   stats::predict(object@fit, ...)
 }
@@ -111,7 +126,7 @@ survkit_tidy <- function(fit, conf_level = 0.95) {
     stringsAsFactors = FALSE)
 }
 
-#' Predicted survival curves
+#' Predict survival curves for a fit
 #'
 #' Backend-aware predictions over a time grid for one or more covariate
 #' profiles. Parametric, spline and cure fits use the backend's own distribution

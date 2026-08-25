@@ -6,7 +6,7 @@
 # the verdict so a caller can choose to simplify, penalise, or abstain rather
 # than trust over-fit coefficients -- the honest small-sample posture.
 
-#' Small-sample power gate (events per variable)
+#' Assess a fit's small-sample power (events per variable)
 #'
 #' Assess whether a survival model is identifiable from the available events.
 #' Returns the event count, the predictor count, the events-per-variable ratio
@@ -27,6 +27,12 @@
 #' @return A list: `n`, `n_events`, `n_predictors`, `events_per_variable`,
 #'   `min_epv`, `underpowered` (logical), `verdict` (`"ok"` / `"underpowered"` /
 #'   `"unknown"`) and `advice`.
+#'
+#' @references
+#' Peduzzi P, Concato J, Kemper E, Holford TR, Feinstein AR. A simulation
+#' study of the number of events per variable in logistic regression
+#' analysis (bibliographic detail as cited in this package's source; not
+#' independently re-verified here — `[unverified]`).
 #'
 #' @examples
 #' df <- data.frame(time = rexp(40), status = rbinom(40, 1, 0.3),

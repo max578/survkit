@@ -2,7 +2,7 @@
 % Please edit documentation in R/methods.R
 \name{survkit_curve}
 \alias{survkit_curve}
-\title{Predicted survival curves}
+\title{Predict survival curves for a fit}
 \usage{
 survkit_curve(
   fit,

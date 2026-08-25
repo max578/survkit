@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimands.R
 \name{survkit_cuminc}
 \alias{survkit_cuminc}
-\title{Cumulative incidence for competing risks}
+\title{Compute cumulative incidence for competing risks}
 \usage{
 survkit_cuminc(formula, data, ...)
 }

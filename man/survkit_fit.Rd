@@ -2,7 +2,7 @@
 % Please edit documentation in R/classes.R
 \name{survkit_fit}
 \alias{survkit_fit}
-\title{The fitted-model class}
+\title{Represent a fitted survival model}
 \usage{
 survkit_fit(
   method = character(0),
@@ -63,6 +63,12 @@ An S7 object returned by \code{\link[=survkit]{survkit()}}. It normalises every 
 one shape: the method and kind, the raw backend fit (kept for backend-specific
 follow-up), the coefficient vector and covariance, the log-likelihood, the
 sample and event counts, and the small-sample power verdict.
+}
+\examples{
+fit <- survkit(survival::Surv(time, status) ~ age + sex, survival::lung,
+               method = "cox")
+fit@method
+fit@n_events
 }
 \seealso{
 \code{\link[=survkit]{survkit()}} (constructs this object), \code{\link[=survkit_tidy]{survkit_tidy()}},

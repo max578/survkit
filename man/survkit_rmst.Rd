@@ -34,9 +34,11 @@ survkit_rmst(fit, tau = 365)
 \code{\link[=survkit_curve]{survkit_curve()}} for the curve the mean integrates.
 
 Other model-fitting: 
+\code{\link{is_survkit_refusal}()},
 \code{\link{survkit}()},
 \code{\link{survkit_cuminc}()},
 \code{\link{survkit_power}()},
+\code{\link{survkit_refusal}()},
 \code{\link{survkit_score}()},
 \code{\link{survkit_triangulate}()}
 }

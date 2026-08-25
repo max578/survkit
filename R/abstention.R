@@ -57,3 +57,74 @@ survkit_power <- function(formula, data, min_epv = 10) {
       NA_character_
     })
 }
+
+# -- Typed refusal --------------------------------------------------------
+# When a caller asks survkit() to abstain rather than warn on an
+# under-powered fit, the EPV gate's verdict is handed back as a classed
+# refusal instead of a fitted model. The class vector ends in "_refusal" so
+# a leader-side gate can recognise it via the shared naming convention
+# (`is_orchestra_decline()`, ORCHESTRA_dev/integration/refusal_contract.R)
+# without depending on survkit's namespace.
+
+#' A classed refusal from the small-sample power gate
+#'
+#' Construct the typed "will not fit" token [survkit()] returns when
+#' `on_underpowered = "abstain"` and the events-per-variable gate
+#' ([survkit_power()]) flags the model as under-powered. Not signalled as a
+#' condition -- returned as an ordinary value, so a caller inspects it with
+#' [is_survkit_refusal()] rather than a `tryCatch()`.
+#'
+#' @param power A power-gate result from [survkit_power()], already flagged
+#'   `underpowered`.
+#'
+#' @return A classed list with class `c("survkit_refusal", "orchestra_refusal",
+#'   "error", "condition")` and elements `reason`, `n`, `n_events`,
+#'   `n_predictors`, `events_per_variable`, `min_epv`, `underpowered`
+#'   (always `TRUE`), `message`.
+#'
+#' @examples
+#' df <- data.frame(time = rexp(20), status = rbinom(20, 1, 0.2),
+#'                  x1 = rnorm(20), x2 = rnorm(20))
+#' p <- survkit_power(survival::Surv(time, status) ~ x1 + x2, df)
+#' r <- survkit_refusal(p)
+#' is_survkit_refusal(r)
+#'
+#' @family model-fitting
+#' @seealso [survkit()], [survkit_power()], [is_survkit_refusal()].
+#' @export
+survkit_refusal <- function(power) {
+  structure(
+    list(
+      reason = "underpowered",
+      n = power$n, n_events = power$n_events,
+      n_predictors = power$n_predictors,
+      events_per_variable = power$events_per_variable,
+      min_epv = power$min_epv, underpowered = TRUE,
+      message = power$advice),
+    class = c("survkit_refusal", "orchestra_refusal", "error", "condition"))
+}
+
+#' Is an object a survkit power-gate refusal?
+#'
+#' @param x Any object.
+#' @return A single logical.
+#'
+#' @examples
+#' is_survkit_refusal(42)
+#'
+#' @family model-fitting
+#' @seealso [survkit_refusal()].
+#' @export
+is_survkit_refusal <- function(x) {
+  inherits(x, "survkit_refusal")
+}
+
+#' @export
+print.survkit_refusal <- function(x, ...) {
+  cat("<survkit_refusal>\n")
+  cat("  reason:", x$reason, "\n")
+  cat(sprintf("  events per predictor: %.1f (< %g)\n",
+              x$events_per_variable, x$min_epv))
+  cat(" ", x$message, "\n")
+  invisible(x)
+}

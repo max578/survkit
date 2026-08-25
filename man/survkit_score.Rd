@@ -35,9 +35,11 @@ survkit_score(fit, survival::lung, times = c(200, 400, 600))
 \code{\link[=survkit_curve]{survkit_curve()}} for the predictions scored here.
 
 Other model-fitting: 
+\code{\link{is_survkit_refusal}()},
 \code{\link{survkit}()},
 \code{\link{survkit_cuminc}()},
 \code{\link{survkit_power}()},
+\code{\link{survkit_refusal}()},
 \code{\link{survkit_rmst}()},
 \code{\link{survkit_triangulate}()}
 }

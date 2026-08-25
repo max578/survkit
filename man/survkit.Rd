@@ -10,7 +10,8 @@ survkit(
   method = "weibull",
   ...,
   check_power = TRUE,
-  warn_underpowered = TRUE
+  warn_underpowered = TRUE,
+  on_underpowered = c("warn", "abstain")
 )
 }
 \arguments{
@@ -26,10 +27,18 @@ survkit(
 \item{check_power}{Logical; run the events-per-variable gate (default \code{TRUE}).}
 
 \item{warn_underpowered}{Logical; warn when the gate flags the model
-under-powered (default \code{TRUE}).}
+under-powered (default \code{TRUE}). Ignored when \code{on_underpowered = "abstain"}.}
+
+\item{on_underpowered}{One of \code{"warn"} (default) or \code{"abstain"}. \code{"warn"}
+preserves the historical behaviour: the model is fitted regardless, with
+a warning when \code{warn_underpowered} is \code{TRUE}. \code{"abstain"} declines to
+fit at all when the gate flags the model under-powered, returning a
+\code{\link[=survkit_refusal]{survkit_refusal()}} instead -- the typed token an orchestra-level caller
+can recognise via \code{is_orchestra_decline()}.}
 }
 \value{
-A \link{survkit_fit} object.
+A \link{survkit_fit} object, or a \code{\link[=survkit_refusal]{survkit_refusal()}} when
+\code{on_underpowered = "abstain"} and the power gate is not satisfied.
 }
 \description{
 One interface over the established survival stack. \code{method} selects an
@@ -55,8 +64,10 @@ coef(fit)
 \code{\link[=survkit_methods]{survkit_methods()}} for the registry, \code{\link[=survkit_power]{survkit_power()}} for the gate.
 
 Other model-fitting: 
+\code{\link{is_survkit_refusal}()},
 \code{\link{survkit_cuminc}()},
 \code{\link{survkit_power}()},
+\code{\link{survkit_refusal}()},
 \code{\link{survkit_rmst}()},
 \code{\link{survkit_score}()},
 \code{\link{survkit_triangulate}()}

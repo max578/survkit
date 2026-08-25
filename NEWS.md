@@ -1,3 +1,13 @@
+# survkit (development version)
+
+* `survkit()` gains an `on_underpowered = c("warn", "abstain")` argument.
+  `"warn"` preserves the historical behaviour (fit anyway, with a warning);
+  `"abstain"` declines to fit an under-powered model and instead returns a
+  [survkit_refusal()] -- a typed, classed token (`c("survkit_refusal",
+  "orchestra_refusal", "error", "condition")`) recognisable to a leader-side
+  gate via `is_orchestra_decline()`, rather than a bare `warning()` plus a
+  fitted model regardless of the power gate's verdict.
+
 # survkit 0.1.0
 
 First public release. The registry-dispatched facade of the development scaffold

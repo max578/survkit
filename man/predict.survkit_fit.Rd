@@ -3,6 +3,10 @@
 \name{predict.survkit_fit}
 \alias{predict.survkit_fit}
 \title{Predict from the raw backend fit}
+\usage{
+## S7 method for class <survkit::survkit_fit>
+predict(object, ...)
+}
 \arguments{
 \item{object}{A \link{survkit_fit}.}
 

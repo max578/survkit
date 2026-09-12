@@ -21,9 +21,9 @@ survkit_contract()
 \seealso{
 \code{\link[=survkit_validate_method]{survkit_validate_method()}}, \code{\link[=survkit_register]{survkit_register()}}.
 
-Other method-registry: 
-\code{\link{survkit_methods}()},
-\code{\link{survkit_register}()},
-\code{\link{survkit_validate_method}()}
+Other method-registry:
+\code{\link[=survkit_methods]{survkit_methods()}},
+\code{\link[=survkit_register]{survkit_register()}},
+\code{\link[=survkit_validate_method]{survkit_validate_method()}}
 }
 \concept{method-registry}

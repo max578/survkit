@@ -60,13 +60,13 @@ tri
 \code{\link[=survkit_rmst]{survkit_rmst()}} for the quantity compared, \code{\link[=survkit]{survkit()}} for a single
 fit.
 
-Other model-fitting: 
-\code{\link{is_survkit_refusal}()},
-\code{\link{survkit}()},
-\code{\link{survkit_cuminc}()},
-\code{\link{survkit_power}()},
-\code{\link{survkit_refusal}()},
-\code{\link{survkit_rmst}()},
-\code{\link{survkit_score}()}
+Other model-fitting:
+\code{\link[=is_survkit_refusal]{is_survkit_refusal()}},
+\code{\link[=survkit]{survkit()}},
+\code{\link[=survkit_cuminc]{survkit_cuminc()}},
+\code{\link[=survkit_power]{survkit_power()}},
+\code{\link[=survkit_refusal]{survkit_refusal()}},
+\code{\link[=survkit_rmst]{survkit_rmst()}},
+\code{\link[=survkit_score]{survkit_score()}}
 }
 \concept{model-fitting}

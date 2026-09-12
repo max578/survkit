@@ -46,13 +46,13 @@ independently re-verified here — \verb{[unverified]}).
 \seealso{
 \code{\link[=survkit]{survkit()}}, which runs this gate on every fit.
 
-Other model-fitting: 
-\code{\link{is_survkit_refusal}()},
-\code{\link{survkit}()},
-\code{\link{survkit_cuminc}()},
-\code{\link{survkit_refusal}()},
-\code{\link{survkit_rmst}()},
-\code{\link{survkit_score}()},
-\code{\link{survkit_triangulate}()}
+Other model-fitting:
+\code{\link[=is_survkit_refusal]{is_survkit_refusal()}},
+\code{\link[=survkit]{survkit()}},
+\code{\link[=survkit_cuminc]{survkit_cuminc()}},
+\code{\link[=survkit_refusal]{survkit_refusal()}},
+\code{\link[=survkit_rmst]{survkit_rmst()}},
+\code{\link[=survkit_score]{survkit_score()}},
+\code{\link[=survkit_triangulate]{survkit_triangulate()}}
 }
 \concept{model-fitting}

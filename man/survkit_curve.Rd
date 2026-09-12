@@ -44,7 +44,7 @@ head(survkit_curve(fit, times = c(100, 300, 500)))
 \code{\link[=survkit_tidy]{survkit_tidy()}} for the coefficient table, \code{\link[=survkit_rmst]{survkit_rmst()}} for the
 restricted mean.
 
-Other fit-methods: 
-\code{\link{survkit_tidy}()}
+Other fit-methods:
+\code{\link[=survkit_tidy]{survkit_tidy()}}
 }
 \concept{fit-methods}

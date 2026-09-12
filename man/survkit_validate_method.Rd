@@ -36,9 +36,9 @@ survkit_validate_method("cox", survival::Surv(time, status) ~ age,
 \code{\link[=survkit_contract]{survkit_contract()}} for the contract, \code{\link[=survkit_register]{survkit_register()}} to add a
 method.
 
-Other method-registry: 
-\code{\link{survkit_contract}()},
-\code{\link{survkit_methods}()},
-\code{\link{survkit_register}()}
+Other method-registry:
+\code{\link[=survkit_contract]{survkit_contract()}},
+\code{\link[=survkit_methods]{survkit_methods()}},
+\code{\link[=survkit_register]{survkit_register()}}
 }
 \concept{method-registry}

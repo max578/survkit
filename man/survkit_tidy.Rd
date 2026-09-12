@@ -33,7 +33,7 @@ survkit_tidy(fit)
 \seealso{
 \code{\link[=survkit_curve]{survkit_curve()}} for predicted survival.
 
-Other fit-methods: 
-\code{\link{survkit_curve}()}
+Other fit-methods:
+\code{\link[=survkit_curve]{survkit_curve()}}
 }
 \concept{fit-methods}

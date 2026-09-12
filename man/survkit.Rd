@@ -45,7 +45,7 @@ One interface over the established survival stack. \code{method} selects an
 estimator from the registry (\code{\link[=survkit_methods]{survkit_methods()}}); the appropriate backend is
 checked, a small-sample power gate runs (\code{\link[=survkit_power]{survkit_power()}}), and the fit is
 returned as a single typed object (\link{survkit_fit}) with consistent \code{print},
-\code{summary}, \code{coef}, \code{vcov}, \code{predict} and \code{\link[generics:tidy]{generics::tidy()}} methods.
+\code{summary}, \code{coef}, \code{vcov}, \code{predict} and \code{\link[generics:tidy]{tidy()}} methods.
 }
 \details{
 The left-hand side of \code{formula} is a \code{survival::Surv()} response. Extra
@@ -63,13 +63,13 @@ coef(fit)
 \seealso{
 \code{\link[=survkit_methods]{survkit_methods()}} for the registry, \code{\link[=survkit_power]{survkit_power()}} for the gate.
 
-Other model-fitting: 
-\code{\link{is_survkit_refusal}()},
-\code{\link{survkit_cuminc}()},
-\code{\link{survkit_power}()},
-\code{\link{survkit_refusal}()},
-\code{\link{survkit_rmst}()},
-\code{\link{survkit_score}()},
-\code{\link{survkit_triangulate}()}
+Other model-fitting:
+\code{\link[=is_survkit_refusal]{is_survkit_refusal()}},
+\code{\link[=survkit_cuminc]{survkit_cuminc()}},
+\code{\link[=survkit_power]{survkit_power()}},
+\code{\link[=survkit_refusal]{survkit_refusal()}},
+\code{\link[=survkit_rmst]{survkit_rmst()}},
+\code{\link[=survkit_score]{survkit_score()}},
+\code{\link[=survkit_triangulate]{survkit_triangulate()}}
 }
 \concept{model-fitting}

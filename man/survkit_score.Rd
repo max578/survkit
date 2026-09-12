@@ -54,13 +54,13 @@ as cited in this package's source; not independently re-verified here —
 \seealso{
 \code{\link[=survkit_curve]{survkit_curve()}} for the predictions scored here.
 
-Other model-fitting: 
-\code{\link{is_survkit_refusal}()},
-\code{\link{survkit}()},
-\code{\link{survkit_cuminc}()},
-\code{\link{survkit_power}()},
-\code{\link{survkit_refusal}()},
-\code{\link{survkit_rmst}()},
-\code{\link{survkit_triangulate}()}
+Other model-fitting:
+\code{\link[=is_survkit_refusal]{is_survkit_refusal()}},
+\code{\link[=survkit]{survkit()}},
+\code{\link[=survkit_cuminc]{survkit_cuminc()}},
+\code{\link[=survkit_power]{survkit_power()}},
+\code{\link[=survkit_refusal]{survkit_refusal()}},
+\code{\link[=survkit_rmst]{survkit_rmst()}},
+\code{\link[=survkit_triangulate]{survkit_triangulate()}}
 }
 \concept{model-fitting}

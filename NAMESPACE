@@ -19,14 +19,16 @@ export(survkit_score)
 export(survkit_tidy)
 export(survkit_triangulate)
 export(survkit_validate_method)
-importFrom(stats,AIC)
-importFrom(stats,coef)
-importFrom(stats,logLik)
-importFrom(stats,model.frame)
-importFrom(stats,model.response)
-importFrom(stats,pnorm)
-importFrom(stats,predict)
-importFrom(stats,qnorm)
-importFrom(stats,setNames)
-importFrom(stats,terms)
-importFrom(stats,vcov)
+importFrom(stats,
+  AIC,
+  coef,
+  logLik,
+  model.frame,
+  model.response,
+  pnorm,
+  predict,
+  qnorm,
+  setNames,
+  terms,
+  vcov
+)

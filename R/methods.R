@@ -45,6 +45,7 @@ S7::method(logLik, survkit_fit) <- function(object, ...) {
 #' prediction on a common time grid, use [survkit_curve()] instead.
 #'
 #' @name predict.survkit_fit
+#' @usage NULL
 #' @param object A [survkit_fit].
 #' @param ... Passed to the backend's `predict` method.
 #' @returns Whatever the backend's `predict` method returns.

@@ -129,6 +129,17 @@ survkit_register("my_method", kind = "parametric", backend = "somepkg",
                  })
 ```
 
+## Contributing
+
+Bug reports and suggestions are welcome through the
+[issue tracker](https://github.com/max578/survkit/issues).
+
+## Citation
+
+```r
+citation("survkit")
+```
+
 ## Licence
 
 MIT © Max Moldovan.

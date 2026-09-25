@@ -6,3 +6,6 @@
 ^codemeta\.json$
 ^\.Rproj\.user$
 ^.*\.Rproj$
+^\.claude$
+^\.positai$
+^\.cursor$

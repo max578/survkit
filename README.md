@@ -2,7 +2,7 @@
 
 > A unified, extensible toolkit for time-to-event analysis: one interface over
 > the established R survival stack, with cross-method triangulation as the
-> honesty check on top.
+> consistency check on top.
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)

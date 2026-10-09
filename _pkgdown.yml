@@ -17,7 +17,7 @@ reference:
   - survkit_rmst
   - survkit_cuminc
 - title: Triangulation and scoring
-  desc: The honesty layer.
+  desc: Cross-method consistency checks.
   contents:
   - survkit_triangulate
   - survkit_score

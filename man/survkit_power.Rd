@@ -40,8 +40,8 @@ survkit_power(survival::Surv(time, status) ~ x1 + x2, df)$verdict
 \references{
 Peduzzi P, Concato J, Kemper E, Holford TR, Feinstein AR. A simulation
 study of the number of events per variable in logistic regression
-analysis (bibliographic detail as cited in this package's source; not
-independently re-verified here — \verb{[unverified]}).
+analysis. \emph{Journal of Clinical Epidemiology} 1996; 49(12): 1373-1379.
+\doi{10.1016/S0895-4356(96)00236-3}
 }
 \seealso{
 \code{\link[=survkit]{survkit()}}, which runs this gate on every fit.

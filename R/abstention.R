@@ -1,10 +1,10 @@
 # -- Small-sample power gate --------------------------------------------------
 # Survival models identify from EVENTS, not rows: a trial with 500 censored
 # subjects and 4 deaths carries four data points for the hazard. The
-# events-per-variable (EPV) heuristic (Peduzzi et al. 1995; >= 10 events per
+# events-per-variable (EPV) heuristic (Peduzzi et al. 1996; >= 10 events per
 # predictor) is the standard guard. survkit() runs it on every fit and records
 # the verdict so a caller can choose to simplify, penalise, or abstain rather
-# than trust over-fit coefficients -- the honest small-sample posture.
+# than trust over-fit coefficients.
 
 #' Assess a fit's small-sample power (events per variable)
 #'
@@ -31,8 +31,8 @@
 #' @references
 #' Peduzzi P, Concato J, Kemper E, Holford TR, Feinstein AR. A simulation
 #' study of the number of events per variable in logistic regression
-#' analysis (bibliographic detail as cited in this package's source; not
-#' independently re-verified here — `[unverified]`).
+#' analysis. *Journal of Clinical Epidemiology* 1996; 49(12): 1373-1379.
+#' \doi{10.1016/S0895-4356(96)00236-3}
 #'
 #' @examples
 #' df <- data.frame(time = rexp(40), status = rbinom(40, 1, 0.3),
@@ -69,8 +69,7 @@ survkit_power <- function(formula, data, min_epv = 10) {
 # under-powered fit, the EPV gate's verdict is handed back as a classed
 # refusal instead of a fitted model. The class vector ends in "_refusal" so
 # a leader-side gate can recognise it via the shared naming convention
-# (`is_orchestra_decline()`, ORCHESTRA_dev/integration/refusal_contract.R)
-# without depending on survkit's namespace.
+# (`is_orchestra_decline()`) without depending on survkit's namespace.
 
 #' A classed refusal from the small-sample power gate
 #'

@@ -47,9 +47,9 @@ survkit_score(fit, survival::lung, times = c(200, 400, 600))
 }
 \references{
 Graf E, Schmoor C, Sauerbrei W, Schumacher M. Assessment and comparison of
-prognostic classification schemes for survival data (bibliographic detail
-as cited in this package's source; not independently re-verified here —
-\verb{[unverified]}).
+prognostic classification schemes for survival data. \emph{Statistics in
+Medicine} 1999; 18(17-18): 2529-2545.
+\doi{10.1002/(SICI)1097-0258(19990915/30)18:17/18<2529::AID-SIM274>3.0.CO;2-5}
 }
 \seealso{
 \code{\link[=survkit_curve]{survkit_curve()}} for the predictions scored here.

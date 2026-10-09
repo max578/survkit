@@ -1,7 +1,7 @@
 # -- Cross-method triangulation -----------------------------------------------
 # The signature move. Fit the same data under several methods, compare them on a
 # decision-relevant quantity (the restricted mean, and optionally survival at a
-# landmark), and read their spread as a misspecification signal: when honest
+# landmark), and read their spread as a misspecification signal: when competing
 # models of the same data disagree on what a decision turns on, at least one of
 # them is wrong about the shape of the hazard. The cross-paradigm pairing
 # (frequentist survkit against a Bayesian fit) is owned one layer up; here the

@@ -183,7 +183,7 @@ survkit_score(cox, survival::lung, times = c(200, 400, 600))
 
 ## Triangulating across methods
 
-Fitting the same question several ways is the honesty check survkit is built
+Fitting the same question several ways is the consistency check survkit is built
 for: methods that make different distributional assumptions about the same
 hazard should still land near the same restricted mean survival time. When they
 disagree by more than a `threshold` relative spread, the fit is flagged --

@@ -1,4 +1,4 @@
-# survkit
+# survkit <img src="man/figures/logo.png" align="right" height="139" alt="survkit logo" />
 
 > A unified, extensible toolkit for time-to-event analysis: one interface over
 > the established R survival stack, with cross-method triangulation as the
@@ -8,6 +8,7 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check](https://github.com/max578/survkit/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/max578/survkit/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/max578/survkit/graph/badge.svg)](https://app.codecov.io/gh/max578/survkit)
+[![r-universe](https://max578.r-universe.dev/badges/survkit)](https://max578.r-universe.dev/survkit)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
@@ -34,6 +35,24 @@ than a wrapper:
 
 It stands alone — siblings are optional (`Suggests`, behind `requireNamespace()`
 guards) and `R CMD check` is clean with none installed.
+
+## Related packages
+
+- [survival](https://CRAN.R-project.org/package=survival) holds the core
+  routines: `Surv` objects, Kaplan-Meier and Aalen-Johansen curves, Cox
+  models and parametric accelerated failure time models.
+- [flexsurv](https://CRAN.R-project.org/package=flexsurv) fits flexible
+  parametric survival models, including Royston-Parmar splines and any
+  user-defined distribution, and parametric multi-state models.
+- [censored](https://CRAN.R-project.org/package=censored) adds survival
+  engines (parametric, semi-parametric and tree-based) to the parsnip
+  modelling interface.
+
+survkit fits its models with survival and, when installed, flexsurv, cmprsk,
+coxme, flexsurvcure and icenReg, and returns every fit in one object type. It
+then compares the same question across methods, warns when there are too few
+events for the model, and reports restricted mean survival, cumulative
+incidence and prediction scores through one set of functions.
 
 ## Install
 

@@ -5,6 +5,8 @@
 \alias{survkit-package}
 \title{survkit: A Unified, Extensible Toolkit for Time-to-Event Analysis}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 One clean interface over the established survival stack (parametric accelerated-failure-time models, Cox proportional hazards, competing risks, recurrent events, frailty, flexible splines and a non-parametric Kaplan-Meier baseline), driven by an extensible method registry so new estimators slot in without an API change. Fits return a single typed object with consistent prediction, summary and tidying methods. On top of the fits sit the value layer: cross-method triangulation that reads disagreement as a misspecification signal, restricted mean survival time and cumulative incidence, inverse-probability-of-censoring-weighted predictive scoring, a small-sample power gate that abstains when events are too few to identify the model, a registry conformance contract, and an optional emitter to an ensemble-manifest contract for composition with a wider analytics stack.
 }
 \seealso{

@@ -1,3 +1,9 @@
+# survkit (development version)
+
+* The package has a logo.
+* README lists related packages and carries an r-universe badge.
+* CI runs lintr (report-only).
+
 # survkit 0.1.0
 
 First public release. The registry-dispatched facade of the development scaffold

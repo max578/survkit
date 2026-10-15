@@ -1,6 +1,6 @@
 Package: survkit
 Title: A Unified, Extensible Toolkit for Time-to-Event Analysis
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R:
     person("Max", "Moldovan", email = "max.moldovan@gmail.com",
            role = c("aut", "cre"),

@@ -40,6 +40,6 @@ Suggests:
     rmarkdown
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-URL: https://github.com/max578/survkit
+URL: https://github.com/max578/survkit, https://max578.github.io/survkit/
 BugReports: https://github.com/max578/survkit/issues
 Config/roxygen2/version: 8.1.0

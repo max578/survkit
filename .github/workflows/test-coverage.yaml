@@ -34,11 +34,13 @@ jobs:
             install_path = file.path(normalizePath(Sys.getenv("RUNNER_TEMP"), winslash = "/"), "package")
           )
           covr::to_cobertura(cov)
+          # The total is printed so it can be read from the job log when
+          # the Codecov upload has no token.
+          print(cov)
+          cat(sprintf("survkit TOTAL COVERAGE: %.2f%%\n", covr::percent_coverage(cov)))
         shell: Rscript {0}
 
-      # Non-blocking: the upload needs a CODECOV_TOKEN secret (this repo is
-      # private). Coverage is computed and reported regardless; the job does not
-      # fail CI when the token is absent.
+      # An upload problem (for example no token) does not fail the job.
       - uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: false

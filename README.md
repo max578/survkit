@@ -10,6 +10,7 @@
 [![Codecov test coverage](https://codecov.io/gh/max578/survkit/graph/badge.svg)](https://app.codecov.io/gh/max578/survkit)
 [![r-universe](https://max578.r-universe.dev/badges/survkit)](https://max578.r-universe.dev/survkit)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![pkgdown](https://github.com/max578/survkit/actions/workflows/pkgdown.yaml/badge.svg)](https://max578.github.io/survkit/)
 <!-- badges: end -->
 
 `survkit` puts one clean interface over the established R survival stack —

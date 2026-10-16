@@ -9,6 +9,7 @@ reference:
   contents:
   - survkit
   - survkit_fit
+  - predict.survkit_fit
   - survkit_tidy
   - survkit_curve
 - title: Decision-relevant estimands
@@ -34,3 +35,8 @@ reference:
   contents:
   - as_survkit_manifest
   - survkit_manifest
+- title: Refusals
+  desc: The typed result returned when a method declines to answer.
+  contents:
+  - survkit_refusal
+  - is_survkit_refusal

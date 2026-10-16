@@ -13,6 +13,7 @@ One clean interface over the established survival stack (parametric accelerated-
 Useful links:
 \itemize{
   \item \url{https://github.com/max578/survkit}
+  \item \url{https://max578.github.io/survkit/}
   \item Report bugs at \url{https://github.com/max578/survkit/issues}
 }
 
